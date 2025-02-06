@@ -1,2 +1,3 @@
 This is a new text file
 Additional content
+Urgent hotfix applied
