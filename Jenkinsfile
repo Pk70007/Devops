@@ -1,28 +1,30 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git 'https://github.com/Pk70007/Devops.git'
             }
         }
-
-        stage('Build') {
+        stage('Build App') {
             steps {
-                echo 'Building the project...'
+                sh 'mvn clean package'
             }
         }
-
         stage('Test') {
             steps {
-                echo 'Running tests...'
+                sh 'mvn test'
             }
         }
-
-        stage('Deploy') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Deploying to environment...'
+                sh 'docker build -t your-dockerhub-username/app:latest .'
+                sh 'docker push your-dockerhub-username/app:latest'
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                ansiblePlaybook credentialsId: 'ansible-key', inventory: 'inventory.ini', playbook: 'deploy-to-k8s.yml'
             }
         }
     }
