@@ -1,0 +1,6 @@
+- hosts: localhost
+  tasks:
+    - name: Deploy to Kubernetes
+      shell: |
+        kubectl set image deployment/myapp myapp=your-dockerhub-username/app:latest
+        kubectl rollout status deployment/myapp
